@@ -4,6 +4,7 @@ namespace Devgleb\CoinMarketCap;
 
 use Devgleb\CoinMarketCap\Api\Cryptocurrency;
 use Devgleb\CoinMarketCap\Api\Fiat;
+use Devgleb\CoinMarketCap\Api\Key;
 use Devgleb\CoinMarketCap\Api\Tools;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
@@ -76,5 +77,10 @@ class CoinMarketCap {
     public function fiat(): Fiat
     {
         return new Fiat($this);
+    }
+
+    public function key(): Key
+    {
+        return new Key($this);
     }
 }
