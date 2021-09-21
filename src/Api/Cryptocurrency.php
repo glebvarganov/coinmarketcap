@@ -17,7 +17,7 @@ class Cryptocurrency extends Api
      * @return array
      * @throws \Exception
      */
-    public function getList($listing_status = 'active', $start = 1, $limit = 100, $sort = 'id', $symbol = '', $aux = 'platform,first_historical_data,last_historical_data,is_active'): array
+    public function getList($symbol = '', $start = 1, $limit = 100, $listing_status = 'active', $sort = 'id', $aux = 'platform,first_historical_data,last_historical_data,is_active'): array
     {
         $params = [
             'listing_status' => $listing_status,
@@ -47,7 +47,7 @@ class Cryptocurrency extends Api
      * @return array
      * @throws \Exception
      */
-    public function getMetadata($id = '', $slug = '', $symbol = '', $address = '', $aux = 'urls,logo,description,tags,platform,date_added,notice'): array
+    public function getInfo($id = '', $slug = '', $symbol = '', $address = '', $aux = 'urls,logo,description,tags,platform,date_added,notice'): array
     {
         $params = [
             'aux' => $aux
@@ -87,5 +87,112 @@ class Cryptocurrency extends Api
         return $this->get('/cryptocurrency/listings/latest', $params);
     }
 
+    /**
+     * Returns information about all coin categories available on CoinMarketCap
+     * @link - https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyCategories
+     *
+     * @param string $id Filtered categories by one or more comma-separated cryptocurrency CoinMarketCap IDs. Example: 1,2
+     * @param string $slug Alternatively filter categories by a comma-separated list of cryptocurrency slugs. Example: "bitcoin,ethereum"
+     * @param string $symbol Alternatively filter categories one or more comma-separated cryptocurrency symbols. Example: "BTC,ETH"
+     * @param int $start Optionally offset the start (1-based index) of the paginated list of items to return
+     * @param string $limit Optionally specify the number of results to return.
+     * @return array
+     * @throws \Exception
+     */
+    public function getCategories($id = '', $slug = '', $symbol = '', $start = 1, $limit = ''): array
+    {
+        $params = ['start' => $start];
+
+        if (is_null($id) === false && empty($id) === false) {
+            $params['id'] = $id;
+        }
+
+        if (is_null($slug) === false && empty($slug) === false) {
+            $params['slug'] = $slug;
+        }
+
+        if (is_null($symbol) === false && empty($symbol) === false) {
+            $params['symbol'] = $symbol;
+        }
+
+        if (is_null($limit) === false && empty($limit) === false) {
+            $params['limit'] = $limit;
+        }
+
+        return $this->get('/cryptocurrency/categories', $params);
+    }
+
+    /**
+     * Returns information about a single coin category available on CoinMarketCap.
+     * @link https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyCategory
+     *
+     * @param $id The Category ID. This can be found using the Categories API.
+     * @param int $start Optionally offset the start (1-based index) of the paginated list of coins to return.
+     * @param int $limit Optionally specify the number of coins to return.
+     * @param string $convert Optionally calculate market quotes in up to 120 currencies at once by passing a comma-separated list of cryptocurrency or fiat currency symbols.
+     * @param string $convert_id Optionally calculate market quotes by CoinMarketCap ID instead of symbol.
+     * @return array
+     * @throws \Exception
+     */
+    public function getCategory($id, $start = 1, $limit = 100, $convert = '', $convert_id = ''): array
+    {
+        $params = [
+            'id' => $id,
+            'start' => $start,
+            'limit' => $limit
+        ];
+
+        return $this->get('/cryptocurrency/category', $params);
+    }
+
+    /**
+     * Returns a list of past, present, or future airdrops which have run on CoinMarketCap.
+     * @link https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyAirdrops
+     *
+     * @param int $start Optionally offset the start (1-based index) of the paginated list of items to return.
+     * @param int $limit Optionally specify the number of results to return.
+     * @param string $status What status of airdrops. Valid values: "ONGOING" / "ENDED" / "UPCOMING"
+     * @param string $id Filtered airdrops by one cryptocurrency CoinMarketCap IDs. Example: 1
+     * @param string $slug Alternatively filter airdrops by a cryptocurrency slug. Example: "bitcoin"
+     * @param string $symbol Alternatively filter airdrops one cryptocurrency symbol. Example: "BTC"
+     * @return array
+     * @throws \Exception
+     */
+    public function getAirdrops($start = 1, $limit = 100, $status = 'ONGOING', $id = '', $slug = '', $symbol = ''): array
+    {
+        $params = [
+            'start' => $start,
+            'limit' => $limit,
+            'status' => strtoupper($status)
+        ];
+
+        if (is_null($id) === false && empty($id) === false) {
+            $params['id'] = $id;
+        }
+
+        if (is_null($slug) === false && empty($slug) === false) {
+            $params['slug'] = $slug;
+        }
+
+        if (is_null($symbol) === false && empty($symbol) === false) {
+            $params['symbol'] = $symbol;
+        }
+
+        return $this->get('/cryptocurrency/airdrops', $params);
+    }
+
+    /**
+     * Returns information about a single airdrop available on CoinMarketCap.
+     * @link https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyAirdrop
+     *
+     * @param int $id Airdrop Unique ID. This can be found using the Airdrops API.
+     * @return array
+     * @throws \Exception
+     */
+    public function getAirdrop($id): array
+    {
+        $params = ['id' => $id];
+        return $this->get('/cryptocurrency/airdrop', $params);
+    }
 
 }
