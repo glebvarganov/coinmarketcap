@@ -29,7 +29,7 @@ class Api
      * @return array
      * @throws Exception
      */
-    public function get(string $uri, array $query = []): array
+    protected function get(string $uri, array $query = []): array
     {
         $response = $this->CMC->getHttpClient()->request(
             'GET',
