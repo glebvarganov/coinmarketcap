@@ -5,5 +5,5 @@ PHP client for [CoinMarketCap API](https://coinmarketcap.com/api/).
 
 # Installation
 ```bash
-composer require glebvarganov/coinmarketcap
+composer require glebvarganov/coinmarketcap-api
 ```
