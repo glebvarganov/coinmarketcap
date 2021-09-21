@@ -18,7 +18,7 @@ class Tools extends Api
      * @return array
      * @throws \Exception
      */
-    public function convertPrice($amount, $id = '', $symbol = '', $time = '', $convert = '', $convert_id = ''): array
+    public function getConvertPrice($amount, $id = '', $symbol = '', $convert = '', $convert_id = '', $time = ''): array
     {
         if (empty($id) && empty($symbol)) {
             throw new \InvalidArgumentException('One "id" or "symbol" is required.');
